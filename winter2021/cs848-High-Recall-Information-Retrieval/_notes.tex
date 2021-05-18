@@ -1,0 +1,96 @@
+Validate paper findings by correlating clarity score with average precision
+1) come up with set of queries (possibly look into query expansion methods)
+X) augment clarity score class to return a list of the highest contributing terms to the clarity score to reproduce graphs and paper
+X) augment clarity score class to return value of the query and collection language models at terms to reproduce graphs and paper
+4) Read more papers to better understand query expansion
+X) generate code to compute rank correlation coefficient
+X) figure out how to perform multinomial retrieval
+7) find a baseline psudo-relevance feedback method
+These are the ranked retrieval methods supported by wumpus:
+    bm25/okapi - 
+    bm25f -
+    bm25tera -
+    cdr - Cover Density Ranking
+    vectorspace/vsm - 
+    desktop - DesktopQuery ranking algorithm
+    lm/lmd -
+    pontecroft - DOESN'T WORK
+    qap -
+    qap2 - DOESN'T WORK
+    np - DOESN'T WORK
+no multinomial retrieval or tf-idf (see footnote in paper)
+
+#####
+##### Compute values for main rank correllations table 
+#####
+cd retrievals
+for run in bm25-count1000 lm-count1000; do
+  for i in $(seq 5 8); do
+    for src in title desc '(title|desc)'; do
+      printf "$run trec$i $src: "
+      grep -E "$run"'_trec'$i'_.*_'"$src" trec"$i"/scores > /tmp/tmp
+      ~/course_project/clarityscore/rank_correlation.py /tmp/tmp | tail -n 1
+      echo $(cat /tmp/tmp | wc -l)
+    done
+  done
+done
+
+
+
+
+#####
+##### Generating new queries using top contributing term to clarity score for bm25-trec6-titles
+#####
+for f in $(ls retrievals/trec6/clarity_score/bm25-count1000_trec6_*title*); do
+  docno="$(basename "$f" | cut -d '_' -f 3)"
+  query_filename="$docno"_"$(basename "$f" | cut -d '_' -f 1-2,4 | rev | sed 's/_/-1sc-/' | rev | sed 's/_/-/g')".txt
+  grep '^Augmented Query 1' "$f" | cut -d '=' -f 2 > queries/trec6-queries/"$query_filename"
+done
+
+
+
+
+###
+### Computing correlation per topic
+###
+for run in bm25-count1000 lm-count1000; do
+  for i in $(seq 5 8); do
+    echo "$run trec$i"
+    for topicno in $(grep -E "$run"'_.*_(desc|title)' retrievals/trec"$i"/scores | cut -d ' ' -f 1 | cut -d '_' -f 3 | sort -u); do
+      grep -E "$run"'_.*_'"$topicno"'_(desc|title)' retrievals/trec"$i"/scores > /tmp/tmp && ~/course_project/clarityscore/rank_correlation.py /tmp/tmp | tail -n 1 | cut -d ' ' -f 1 | cut -d '=' -f 2
+    done > /tmp/bryant-tmp-for-computing-pertopic-stats
+    python -c '
+import os,sys
+import numpy as np
+a=np.array([float(v) for v in sys.argv[1:]])
+print(len(a), np.sum(np.maximum(a, np.zeros(a.shape))), np.mean(a), np.std(a))' $(cat /tmp/bryant-tmp-for-computing-pertopic-stats)
+  done
+done
+
+
+
+#####
+##### Compute mean and std of clarity scores average, precision scores, and max contrib score
+#####
+for run in bm25-count1000 lm-count1000; do
+  for i in $(seq 5 8); do
+    for src in title desc; do
+      echo "$run trec$i $src"
+      printf "ap: "
+      python -c "import os,sys
+import numpy as np
+a=np.array([float(v) for v in sys.argv[1:]])
+print(len(a), np.mean(a), np.std(a))" $(grep -E "$run"'_trec'$i'_.*_'"$src" retrievals/trec"$i"/scores | cut -d ' ' -f 2)
+      printf "cs: "
+      python -c "import os,sys
+import numpy as np
+a=np.array([float(v) for v in sys.argv[1:]])
+print(len(a), np.mean(a), np.std(a))" $(grep -E "$run"'_trec'$i'_.*_'"$src" retrievals/trec"$i"/scores | cut -d ' ' -f 3)
+    printf "max cs contrib: "
+      python -c "import os,sys
+import numpy as np
+a=np.array([float(v) for v in sys.argv[1:]])
+print(len(a), np.mean(a), np.std(a))" $(grep -A 1 "Top Contributing Terms" retrievals/trec"$i"/clarity_score/"$run"_trec"$i"_*_"$src"_clarity-score.txt | grep -v 'Top Contributing Terms' | grep -v '\--' | cut -d ':' -f 2)
+    done
+  done
+done

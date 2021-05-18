@@ -1,0 +1,140 @@
+@misc{iouring,
+    title = {Efficient IO with io\_uring},
+    year= {2019},
+    howpublished = {\url{https://kernel.dk/io\_uring.pdf}},
+    note = {Accessed: 2020-11-19}
+}
+@misc{iouring-intro,
+    author = {Jonathan Corbet},
+    title = {The rapid growth of io\_uring},
+    year = {2020},
+    howpublished = {\url{https://lwn.net/Articles/810414/}},
+    note = {Accessed: 2020-11-19}
+}
+@misc{redis-client,
+    title = {Redis Clients Handling},
+    howpublished = {\url{https://redis.io/topics/clients}},
+    note = {Accessed: 2020-12-08}
+}
+@misc{linux-kpti,
+    author = {Jonathan Corbet},
+    title = {KAISER: hiding the kernel from user space},
+    howpublished = {\url{https://lwn.net/Articles/741878/}},
+    year = {2017},
+    note = {Accessed: 2020-12-08}    
+}
+@misc{best-kv-store,
+    title = {DB-Engines Ranking of Key-value Stores},
+    howpublished = {\url{https://db-engines.com/en/ranking/key-value+store}},
+    year = {2020},
+    note = {Accessed: 2020-12-09}
+}
+@inproceedings{kaslr,
+  title={KASLR is Dead: Long Live KASLR},
+  author={D. Gruss and Moritz Lipp and M. Schwarz and Richard Fellner and Cl{\'e}mentine Maurice and S. Mangard},
+  booktitle={ESSoS},
+  year={2017}
+}
+@misc{redis-pipeline,
+    author = {Redis Labs},
+    title = {Using pipelining to speedup Redis queries},
+    howpublished = {\url{https://redis.io/topics/pipelining}},
+    note = {Accessed: 2020-12-08}
+}
+@misc{redis-intro,
+    author = {Redis Labs},
+    title = {Introduction to Redis},
+    howpublished = {\url{https://redis.io/topics/introduction}},
+    note = {Accessed: 2020-12-08}
+}
+@book{macedo2011redis6,
+  title={Redis Cookbook: Practical Techniques for Fast Data Manipulation},
+  author={Macedo, Tiago and Oliveira, Fred},
+  year={2011},
+  publisher={" O'Reilly Media, Inc."}
+}
+@inproceedings{FlexSC,
+author = {Soares, Livio and Stumm, Michael},
+title = {FlexSC: Flexible System Call Scheduling with Exception-Less System Calls},
+year = {2010},
+publisher = {USENIX Association},
+address = {USA},
+abstract = {For the past 30+ years, system calls have been the de facto interface used by applications to request services from the operating system kernel. System calls have almost universally been implemented as a synchronous mechanism, where a special processor instruction is used to yield userspace execution to the kernel. In the first part of this paper, we evaluate the performance impact of traditional synchronous system calls on system intensive workloads. We show that synchronous system calls negatively affect performance in a significant way, primarily because of pipeline flushing and pollution of key processor structures (e.g., TLB, data and instruction caches, etc.).We propose a new mechanism for applications to request services from the operating system kernel: exception-less system calls. They improve processor efficiency by enabling flexibility in the scheduling of operating system work, which in turn can lead to significantly increased temporal and spacial locality of execution in both user and kernel space, thus reducing pollution effects on processor structures. Exception-less system calls are particularly effective on multicore processors. They primarily target highly threaded server applications, such as Web servers and database servers.We present FlexSC, an implementation of exceptionless system calls in the Linux kernel, and an accompanying user-mode thread package (FlexSC-Threads), binary compatible with POSIX threads, that translates legacy synchronous system calls into exception-less ones transparently to applications. We show how FlexSC improves performance of Apache by up to 116%, MySQL by up to 40%, and BIND by up to 105% while requiring no modifications to the applications.},
+booktitle = {Proceedings of the 9th USENIX Conference on Operating Systems Design and Implementation},
+pages = {33–46},
+numpages = {14},
+location = {Vancouver, BC, Canada},
+series = {OSDI'10}
+}
+@inproceedings{RDMAOverTCP,
+  title={Accelerating Redis with RDMA Over InfiniBand},
+  author={Tang, Wenhui and Lu, Yutong and Xiao, Nong and Liu, Fang and Chen, Zhiguang},
+  booktitle={International Conference on Data Mining and Big Data},
+  pages={472--483},
+  year={2017},
+  organization={Springer}
+}
+@inproceedings{RediswithRPCs5,
+  title={High Performance Design for Redis with Fast Event-Driven RDMA RPCs},
+  author={Qi, Xuecheng and Hu, Huiqi and Wei, Xing and Huang, Chengcheng and Zhou, Xuan and Zhou, Aoying},
+  booktitle={International Conference on Database Systems for Advanced Applications},
+  pages={195--210},
+  year={2020},
+  organization={Springer}
+}
+@inproceedings{10.1145/2619239.2626299,
+author = {Kalia, Anuj and Kaminsky, Michael and Andersen, David G.},
+title = {Using RDMA Efficiently for Key-Value Services},
+year = {2014},
+isbn = {9781450328364},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2619239.2626299},
+doi = {10.1145/2619239.2626299},
+abstract = {This paper describes the design and implementation of HERD, a key-value system designed to make the best use of an RDMA network. Unlike prior RDMA-based key-value systems, HERD focuses its design on reducing network round trips while using efficient RDMA primitives; the result is substantially lower latency, and throughput that saturates modern, commodity RDMA hardware.HERD has two unconventional decisions: First, it does not use RDMA reads, despite the allure of operations that bypass the remote CPU entirely. Second, it uses a mix of RDMA and messaging verbs, despite the conventional wisdom that the messaging primitives are slow. A HERD client writes its request into the server's memory; the server computes the reply. This design uses a single round trip for all requests and supports up to 26 million key-value operations per second with 5μs average latency. Notably, for small key-value items, our full system throughput is similar to native RDMA read throughput and is over 2X higher than recent RDMA-based key-value systems. We believe that HERD further serves as an effective template for the construction of RDMA-based datacenter services.},
+booktitle = {Proceedings of the 2014 ACM Conference on SIGCOMM},
+pages = {295–306},
+numpages = {12},
+keywords = {infiniband, ROCE, RDMA, key-value stores},
+location = {Chicago, Illinois, USA},
+series = {SIGCOMM '14}
+}
+@article{rdma-def,
+author = {Kalia, Anuj and Kaminsky, Michael and Andersen, David G.},
+title = {Using RDMA Efficiently for Key-Value Services},
+year = {2014},
+issue_date = {October 2014},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {44},
+number = {4},
+issn = {0146-4833},
+url = {https://doi.org/10.1145/2740070.2626299},
+doi = {10.1145/2740070.2626299},
+abstract = {This paper describes the design and implementation of HERD, a key-value system designed to make the best use of an RDMA network. Unlike prior RDMA-based key-value systems, HERD focuses its design on reducing network round trips while using efficient RDMA primitives; the result is substantially lower latency, and throughput that saturates modern, commodity RDMA hardware.HERD has two unconventional decisions: First, it does not use RDMA reads, despite the allure of operations that bypass the remote CPU entirely. Second, it uses a mix of RDMA and messaging verbs, despite the conventional wisdom that the messaging primitives are slow. A HERD client writes its request into the server's memory; the server computes the reply. This design uses a single round trip for all requests and supports up to 26 million key-value operations per second with 5μs average latency. Notably, for small key-value items, our full system throughput is similar to native RDMA read throughput and is over 2X higher than recent RDMA-based key-value systems. We believe that HERD further serves as an effective template for the construction of RDMA-based datacenter services.},
+journal = {SIGCOMM Comput. Commun. Rev.},
+month = aug,
+pages = {295–306},
+numpages = {12},
+keywords = {key-value stores, infiniband, RDMA, ROCE}
+}
+@TECHREPORT{infiniband-datacenter,
+  institution = {Mellanox Technologies},
+  title = {White paper: Introducing 200G HDR InfiniBand Solutions},
+  number = {060058WP Rev 1.4},
+  year  = {2019},
+}
+@article{infiniband-def,
+  title={An introduction to the infiniband architecture},
+  author={Pfister, Gregory F},
+  journal={High performance mass storage and parallel I/O},
+  volume={42},
+  number={617-632},
+  pages={102},
+  year={2001}
+}
+@inproceedings{Bhattacharya2010AsynchronousIS,
+  title={Asynchronous I/O Support in Linux 2.5},
+  author={Suparna Bhattacharya and S. Pratt and Badari Pulavarty and J. Morgan},
+  year={2010}
+}

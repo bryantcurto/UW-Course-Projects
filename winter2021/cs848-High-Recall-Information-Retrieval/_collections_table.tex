@@ -1,0 +1,89 @@
+% cd /u1/bcurto/course_project/trec-adhoc/retrievals
+%
+\begin{table*}[hbt!]
+  \centering
+  \begin{tabular}{| c || c | c | c | c || c | c |}
+    \hline
+%    \multicolumn{7}{|c|}{Collection Correlations} \\
+%    \hline\hline
+    Retrieval Method & Collection & Topics & Source & Num Queries & Corr & P-value\\
+    \hline
+    \multirow{12}{*}{BM25}
+    &   \multirow{3}{*}{TREC-5}
+        & \multirow{3}{*}{251-300}
+%            &   title & 50 & -0.018776 & 0.847435\\
+%    &   &   &   description & 50 & -0.013878 & 0.886920\\
+%    &   &   &   title \& description & 100 & 0.046061 & 0.497131\\
+            &   title & 50 & -0.01878 & 0.84744\\
+    &   &   &   description & 50 & -0.01388 & 0.88692\\
+    &   &   &   title or description & 100 & 0.04606 & 0.49713\\
+    \cline{2-7}
+    &   \multirow{3}{*}{TREC-6}
+        &   \multirow{3}{*}{301-350}
+%            &   title & 50 & \textbf{0.348571} & $\boldsymbol{3.55}\boldsymbol{\times}\boldsymbol{10}^{\boldsymbol{-4}}$\\
+%    &   &   &   description & 50 & -0.043265 & 0.657522\\
+%    &   &   &   title or description & 100 & 0.064646 & 0.340591\\
+            &   title & 50 & \textbf{0.34857} & $\boldsymbol{3.6}\boldsymbol{\times}\boldsymbol{10}^{\boldsymbol{-4}}$\\
+    &   &   &   description & 50 & -0.04327 & 0.65752\\
+    &   &   &   title or description & 100 & 0.06465 & 0.34059\\
+    \cline{2-7}
+    &   \multirow{3}{*}{TREC-7}
+        &   \multirow{3}{*}{351-400}
+%            &   title & 50 & -0.028571 & 0.769698\\
+%    &   &   &   description & 50 & 0.025306 & 0.795396\\
+%    &   &   &   title or description & 100 & -0.022626 & 0.738720\\
+            &   title & 50 & -0.02857 & 0.76970\\
+    &   &   &   description & 50 & 0.02531 & 0.79540\\
+    &   &   &   title or description & 100 & -0.02263 & 0.73872\\
+    \cline{2-7}
+    &   \multirow{3}{*}{TREC-8}
+        &   \multirow{3}{*}{401-450}
+%            &   title & 50 & -0.023673 & 0.808330\\
+%    &   &   &   description & 50 & -0.030204 & 0.756941\\
+%    &   &   &   title or description & 100 & -0.095354 & 0.159822\\
+            &   title & 50 & -0.02367 & 0.80833\\
+    &   &   &   description & 50 & -0.03020 & 0.75694\\
+    &   &   &   title or description & 100 & -0.09535 & 0.15982\\
+    \hline%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        \multirow{12}{*}{LM}
+    &   \multirow{3}{*}{TREC-5}
+        & \multirow{3}{*}{251-300}
+%            &   title & 50 & -0.134694 & 0.167525\\
+%    &   &   &   description & 50 & 0.018776 & 0.847435\\
+%    &   &   &   title \& description & 100 & 0.020606 & 0.761305\\
+            &   title & 50 & -0.13470 & 0.16753\\
+    &   &   &   description & 50 & 0.01878 & 0.84744\\
+    &   &   &   title or description & 100 & 0.02061 & 0.76131\\
+    \cline{2-7}
+    &   \multirow{3}{*}{TREC-6}
+        &   \multirow{3}{*}{301-350}
+%            &   title & 50 & -0.061224 & 0.530420\\
+%    &   &   &   description & 50 & \textbf{0.188571} & $\boldsymbol{5.3325}\boldsymbol{\times}\boldsymbol{10}^{\boldsymbol{-2}}$\\
+%    &   &   &   title or description & 100 & -0.012121 & 0.858183\\
+            &   title & 50 & -0.06122 & 0.53042\\
+    &   &   &   description & 50 & \textbf{0.18857} & $\boldsymbol{5.333}\boldsymbol{\times}\boldsymbol{10}^{\boldsymbol{-2}}$\\
+    &   &   &   title or description & 100 & -0.01212 & 0.85818\\
+    \cline{2-7}
+    &   \multirow{3}{*}{TREC-7}
+        &   \multirow{3}{*}{351-400}
+%            &   title & 50 & -0.075918 & 0.436609\\
+%    &   &   &   description & 50 & 0.074286 & 0.446536\\
+%    &   &   &   title or description & 100 & -0.056162 & 0.407718\\
+            &   title & 50 & -0.07592 & 0.43661\\
+    &   &   &   description & 50 & 0.07429 & 0.44654\\
+    &   &   &   title or description & 100 & -0.05616 & 0.40772\\
+    \cline{2-7}
+    &   \multirow{3}{*}{TREC-8}
+        &   \multirow{3}{*}{401-450}
+%            &   title & 50 & 0.082449 & 0.398194\\
+%    &   &   &   description & 50 & 0.010612 & 0.913406\\
+%    &   &   &   title or description & 100 & 0.016566 & 0.807072\\
+            &   title & 50 & 0.08245 & 0.39819\\
+    &   &   &   description & 50 & 0.01061 & 0.91341\\
+    &   &   &   title or description & 100 & 0.01657 & 0.80707\\
+    \hline
+  \end{tabular}
+  \caption{The correlation of clarity score with average precision (and p-values) for several TREC collections  using several retrieval methods.}
+  \label{table:collections}
+\end{table*}

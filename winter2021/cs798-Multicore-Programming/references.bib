@@ -1,0 +1,230 @@
+@inproceedings{10.1145/1926385.1926442,
+author = {Attiya, Hagit and Guerraoui, Rachid and Hendler, Danny and Kuznetsov, Petr and Michael, Maged M. and Vechev, Martin},
+title = {Laws of Order: Expensive Synchronization in Concurrent Algorithms Cannot Be Eliminated},
+year = {2011},
+isbn = {9781450304900},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1926385.1926442},
+doi = {10.1145/1926385.1926442},
+abstract = {Building correct and efficient concurrent algorithms is known to be a difficult problem of fundamental importance. To achieve efficiency, designers try to remove unnecessary and costly synchronization. However, not only is this manual trial-and-error process ad-hoc, time consuming and error-prone, but it often leaves designers pondering the question of: is it inherently impossible to eliminate certain synchronization, or is it that I was unable to eliminate it on this attempt and I should keep trying?In this paper we respond to this question. We prove that it is impossible to build concurrent implementations of classic and ubiquitous specifications such as sets, queues, stacks, mutual exclusion and read-modify-write operations, that completely eliminate the use of expensive synchronization.We prove that one cannot avoid the use of either: i) read-after-write (RAW), where a write to shared variable A is followed by a read to a different shared variable B without a write to B in between, or ii) atomic write-after-read (AWAR), where an atomic operation reads and then writes to shared locations. Unfortunately, enforcing RAW or AWAR is expensive on all current mainstream processors. To enforce RAW, memory ordering--also called fence or barrier--instructions must be used. To enforce AWAR, atomic instructions such as compare-and-swap are required. However, these instructions are typically substantially slower than regular instructions.Although algorithm designers frequently struggle to avoid RAW and AWAR, their attempts are often futile. Our result characterizes the cases where avoiding RAW and AWAR is impossible. On the flip side, our result can be used to guide designers towards new algorithms where RAW and AWAR can be eliminated.},
+booktitle = {Proceedings of the 38th Annual ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
+pages = {487–498},
+numpages = {12},
+keywords = {memory fences, lower bounds, algorithms, memory barriers, concurrency},
+location = {Austin, Texas, USA},
+series = {POPL '11}
+}
+@inproceedings{10.1145/3037697.3037721,
+author = {Calciu, Irina and Sen, Siddhartha and Balakrishnan, Mahesh and Aguilera, Marcos K.},
+title = {Black-Box Concurrent Data Structures for NUMA Architectures},
+year = {2017},
+isbn = {9781450344654},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3037697.3037721},
+doi = {10.1145/3037697.3037721},
+abstract = {High-performance servers are Non-Uniform Memory Access (NUMA) machines. To fully leverage these machines, programmers need efficient concurrent data structures that are aware of the NUMA performance artifacts. We propose Node Replication (NR), a black-box approach to obtaining such data structures. NR takes an arbitrary sequential data structure and automatically transforms it into a NUMA-aware concurrent data structure satisfying linearizability. Using NR requires no expertise in concurrent data structure design, and the result is free of concurrency bugs. NR draws ideas from two disciplines: shared-memory algorithms and distributed systems. Briefly, NR implements a NUMA-aware shared log, and then uses the log to replicate data structures consistently across NUMA nodes. NR is best suited for contended data structures, where it can outperform lock-free algorithms by 3.1x, and lock-based solutions by 30x. To show the benefits of NR to a real application, we apply NR to the data structures of Redis, an in-memory storage system. The result outperforms other methods by up to 14x. The cost of NR is additional memory for its log and replicas.},
+booktitle = {Proceedings of the Twenty-Second International Conference on Architectural Support for Programming Languages and Operating Systems},
+pages = {207–221},
+numpages = {15},
+keywords = {concurrent data structures, numa architecture, replication, log, black-box techniques},
+location = {Xi'an, China},
+series = {ASPLOS '17}
+}
+@inproceedings{b-RR_Distributed_Queue,
+author = {Haas, Andreas and Lippautz, Michael and Henzinger, Thomas A. and Payer, Hannes and Sokolova, Ana and Kirsch, Christoph M. and Sezgin, Ali},
+title = {Distributed Queues in Shared Memory: Multicore Performance and Scalability through Quantitative Relaxation},
+year = {2013},
+isbn = {9781450320535},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2482767.2482789},
+doi = {10.1145/2482767.2482789},
+abstract = {A prominent remedy to multicore scalability issues in concurrent data structure implementations is to relax the sequential specification of the data structure. We present distributed queues (DQ), a new family of relaxed concurrent queue implementations. DQs implement relaxed queues with linearizable emptiness check and either configurable or bounded out-of-order behavior or pool behavior. Our experiments show that DQs outperform and outscale in micro- and macrobenchmarks all strict and relaxed queue as well as pool implementations that we considered.},
+booktitle = {Proceedings of the ACM International Conference on Computing Frontiers},
+articleno = {17},
+numpages = {9},
+keywords = {LRU, inexact computing, load balancing},
+location = {Ischia, Italy},
+series = {CF '13}
+}
+@inproceedings{michael_scott,
+author = {Michael, Maged M. and Scott, Michael L.},
+title = {Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms},
+year = {1996},
+isbn = {0897918002},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/248052.248106},
+doi = {10.1145/248052.248106},
+booktitle = {Proceedings of the Fifteenth Annual ACM Symposium on Principles of Distributed Computing},
+pages = {267–275},
+numpages = {9},
+keywords = {multiprogramming, concurrent queue, lock-free, non-blocking, compare_and_swap},
+location = {Philadelphia, Pennsylvania, USA},
+series = {PODC '96}
+}
+@inproceedings{scal-paper,
+author={Haas, Andreas
+and H{\"u}tter, Thomas
+and Kirsch, Christoph M.
+and Lippautz, Michael
+and Preishuber, Mario
+and Sokolova, Ana},
+editor={Bouajjani, Ahmed
+and Fauconnier, Hugues},
+title={Scal: A Benchmarking Suite for Concurrent Data Structures},
+booktitle={Networked Systems},
+year={2015},
+publisher={Springer International Publishing},
+address={Cham},
+pages={1--14},
+abstract={Concurrent data structures such as concurrent queues, stacks, and pools are widely used for concurrent programming of shared-memory multiprocessor and multicore machines. The key challenge is to develop data structures that are not only fast on a given machine but whose performance scales, ideally linearly, with the number of threads, cores, and processors on even bigger machines. Part of that challenge is to provide a common ground for systematically evaluating the performance and scalability of new concurrent data structures and comparing the results with the performance and scalability of existing solutions. For this purpose, we have developed Scal which is an open-source benchmarking framework that provides (1) software infrastructure for executing concurrent data structure algorithms, (2) workloads for benchmarking their performance and scalability, and (3) implementations of a large set of concurrent data structures. We discuss the Scal infrastructure, workloads, and implementations, and encourage further use and development of Scal in the design and implementation of ever faster concurrent data structures.},
+isbn={978-3-319-26850-7}
+}
+@misc{redis-key-db-comparison,
+    title={System Properties Comparison KeyDB vs. Redis},
+    howpublished={\url{https://db-engines.com/en/system/KeyDB\%3BRedis}},
+    note={Accessed: 2021-04-25}
+}
+@misc{redis-enterprise,
+    title={Redis Enterprise Advantages},
+    author = {Redis Labs},
+    howpublished={\url{https://redislabs.com/redis-enterprise/advantages/}},
+    node={Accessed: 2021-04-25},
+}
+@misc{key-db-docs,
+    title={Welcome to KeyDB's Documentation},
+    author={EQ Alpha Technology Ltd. \& others},
+    howpublished={\url{https://docs.keydb.dev/docs/}},
+    note={Accessed: 2021-04-25}
+}
+@misc{key-db-versions,
+    title={Start Using KeyDB in Minutes},
+    author={EQ Alpha Technology Ltd. \& others},
+    howpublished={\url{https://docs.keydb.dev/docs/using-keydb}},
+    note={Accessed: 2021-04-25}
+}
+@misc{thread-sanitizer,
+    title={ThreadSanitizerCppManual},
+    year = {2020},
+    howpublished = {\url{https://github.com/google/sanitizers/wiki/ThreadSanitizerCppManual}},
+    note = {Accessed: 2021-04-24}
+}
+@misc{redis-client,
+    title = {Redis Clients Handling},
+    author = {Redis Labs},
+    howpublished = {\url{https://redis.io/topics/clients}},
+    note = {Accessed: 2021-04-25}
+}
+@misc{redis-io-threads-do-reads,
+    howpublished = "\url{https://github.com/redis/redis/blob/761d7d27711edfbf737def41ff28f5b325fb16c8/redis.conf}",
+    note = {Accessed: 2021-04-25}
+}
+@misc{redis-single-threaded,
+    howpublished = {\url{https://redis.io/topics/benchmarks}},
+    author = {Redis Labs},
+    note = {Accessed: 2021-04-25}
+}
+@misc{linux-kpti,
+    author = {Jonathan Corbet},
+    title = {KAISER: hiding the kernel from user space},
+    howpublished = {\url{https://lwn.net/Articles/741878/}},
+    year = {2017},
+    note = {Accessed: 2021-04-25}    
+}
+@misc{best-kv-store,
+    title = {DB-Engines Ranking of Key-value Stores},
+    howpublished = {\url{https://db-engines.com/en/ranking/key-value+store}},
+    year = {2021},
+    note = {Accessed: 2021-04-25}
+}
+@inproceedings{kaslr,
+  title={KASLR is Dead: Long Live KASLR},
+  author={D. Gruss and Moritz Lipp and M. Schwarz and Richard Fellner and Cl{\'e}mentine Maurice and S. Mangard},
+  booktitle={ESSoS},
+  year={2017}
+}
+@misc{redis-pipeline,
+    author = {Redis Labs},
+    title = {Using pipelining to speedup Redis queries},
+    howpublished = {\url{https://redis.io/topics/pipelining}},
+    note = {Accessed: 2021-04-25}
+}
+@misc{redis-intro,
+    author = {Redis Labs},
+    title = {Introduction to Redis},
+    howpublished = {\url{https://redis.io/topics/introduction}},
+    note = {Accessed: 2021-04-25}
+}
+@book{macedo2011redis6,
+  title={Redis Cookbook: Practical Techniques for Fast Data Manipulation},
+  author={Macedo, Tiago and Oliveira, Fred},
+  year={2011},
+  publisher={" O'Reilly Media, Inc."}
+}
+@inproceedings{RediswithRPCs5,
+  title={High Performance Design for Redis with Fast Event-Driven RDMA RPCs},
+  author={Qi, Xuecheng and Hu, Huiqi and Wei, Xing and Huang, Chengcheng and Zhou, Xuan and Zhou, Aoying},
+  booktitle={International Conference on Database Systems for Advanced Applications},
+  pages={195--210},
+  year={2020},
+  organization={Springer}
+}
+@inproceedings{10.1145/2619239.2626299,
+author = {Kalia, Anuj and Kaminsky, Michael and Andersen, David G.},
+title = {Using RDMA Efficiently for Key-Value Services},
+year = {2014},
+isbn = {9781450328364},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2619239.2626299},
+doi = {10.1145/2619239.2626299},
+abstract = {This paper describes the design and implementation of HERD, a key-value system designed to make the best use of an RDMA network. Unlike prior RDMA-based key-value systems, HERD focuses its design on reducing network round trips while using efficient RDMA primitives; the result is substantially lower latency, and throughput that saturates modern, commodity RDMA hardware.HERD has two unconventional decisions: First, it does not use RDMA reads, despite the allure of operations that bypass the remote CPU entirely. Second, it uses a mix of RDMA and messaging verbs, despite the conventional wisdom that the messaging primitives are slow. A HERD client writes its request into the server's memory; the server computes the reply. This design uses a single round trip for all requests and supports up to 26 million key-value operations per second with 5μs average latency. Notably, for small key-value items, our full system throughput is similar to native RDMA read throughput and is over 2X higher than recent RDMA-based key-value systems. We believe that HERD further serves as an effective template for the construction of RDMA-based datacenter services.},
+booktitle = {Proceedings of the 2014 ACM Conference on SIGCOMM},
+pages = {295–306},
+numpages = {12},
+keywords = {infiniband, ROCE, RDMA, key-value stores},
+location = {Chicago, Illinois, USA},
+series = {SIGCOMM '14}
+}
+@article{rdma-def,
+author = {Kalia, Anuj and Kaminsky, Michael and Andersen, David G.},
+title = {Using RDMA Efficiently for Key-Value Services},
+year = {2014},
+issue_date = {October 2014},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {44},
+number = {4},
+issn = {0146-4833},
+url = {https://doi.org/10.1145/2740070.2626299},
+doi = {10.1145/2740070.2626299},
+abstract = {This paper describes the design and implementation of HERD, a key-value system designed to make the best use of an RDMA network. Unlike prior RDMA-based key-value systems, HERD focuses its design on reducing network round trips while using efficient RDMA primitives; the result is substantially lower latency, and throughput that saturates modern, commodity RDMA hardware.HERD has two unconventional decisions: First, it does not use RDMA reads, despite the allure of operations that bypass the remote CPU entirely. Second, it uses a mix of RDMA and messaging verbs, despite the conventional wisdom that the messaging primitives are slow. A HERD client writes its request into the server's memory; the server computes the reply. This design uses a single round trip for all requests and supports up to 26 million key-value operations per second with 5μs average latency. Notably, for small key-value items, our full system throughput is similar to native RDMA read throughput and is over 2X higher than recent RDMA-based key-value systems. We believe that HERD further serves as an effective template for the construction of RDMA-based datacenter services.},
+journal = {SIGCOMM Comput. Commun. Rev.},
+month = aug,
+pages = {295–306},
+numpages = {12},
+keywords = {key-value stores, infiniband, RDMA, ROCE}
+}
+@TECHREPORT{infiniband-datacenter,
+  institution = {Mellanox Technologies},
+  title = {White paper: Introducing 200G HDR InfiniBand Solutions},
+  number = {060058WP Rev 1.4},
+  year  = {2019},
+}
+@article{infiniband-def,
+  title={An introduction to the infiniband architecture},
+  author={Pfister, Gregory F},
+  journal={High performance mass storage and parallel I/O},
+  volume={42},
+  number={617-632},
+  pages={102},
+  year={2001}
+}
+@inproceedings{Bhattacharya2010AsynchronousIS,
+  title={Asynchronous I/O Support in Linux 2.5},
+  author={Suparna Bhattacharya and S. Pratt and Badari Pulavarty and J. Morgan},
+  year={2010}
+}

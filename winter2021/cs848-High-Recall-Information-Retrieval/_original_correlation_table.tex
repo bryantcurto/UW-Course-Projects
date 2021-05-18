@@ -1,0 +1,20 @@
+\begin{table}[hbt!]
+  \centering
+  \begin{tabular}{| c | c | c | c || c | c |}
+    \hline
+%    \multicolumn{6}{|c|}{Collection Correlations using BM25} \\
+%    \hline\hline
+    Collection & Topics & Source & \multicolumn{1}{|p{1cm}||}{\centering Num\\Queries} & Corr & P-value\\
+    \hline
+    TREC-5 & 251-300 & title & 50 & 0.459 & $6.5 \times 10^{-4}$\\
+%    \hline
+%    TREC-6 & 301-350 & title & 50 & n/a & n/a\\
+    \hline
+    TREC-7 & 351-400 & title & 50 & 0.577 & $2.7 \times 10^{-5}$\\
+    \hline
+    TREC-8 & 401-450 & title & 50 & 0.494 & $2.7 \times 10^{-4}$\\
+    \hline
+  \end{tabular}
+  \caption{Some of the evaluation results of Townsend et al. in \cite{10.1145/564376.564429} showing the correlation of clarity score with average precision in several TREC Ad Hoc test collections using topic titles as queries.}
+  \label{table:original}
+\end{table}

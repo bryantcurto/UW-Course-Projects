@@ -1,0 +1,123 @@
+@inproceedings{10.1145/3359993.3366766,
+    author = {Enberg, Pekka and Rao, Ashwin and Tarkoma, Sasu},
+    title = {Partition-Aware Packet Steering Using XDP and EBPF for Improving Application-Level Parallelism},
+    year = {2019},
+    isbn = {9781450370004},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    url = {https://doi.org/10.1145/3359993.3366766},
+    doi = {10.1145/3359993.3366766},
+    abstract = {A single CPU core is not fast enough to process packets arriving from the network on commodity NICs. Applications are therefore turning to application-level partitioning and NIC offload to exploit parallelism on multicore systems and relieve the CPU. Although NIC offload techniques are not new, programmable NICs have emerged as a way for custom packet processing offload. However, it is not clear what parts of the application should be offloaded to a programmable NIC for improving parallelism.We propose an approach that combines application-level partitioning and packet steering with a programmable NIC. Applications partition data in DRAM between CPU cores, and steer requests to the correct core by parsing L7 packet headers on a programmable NIC. This approach improves request-level parallelism but keeps the partitioning scheme transparent to clients. We believe this approach can reduce latency and improve throughput because it utilizes multicore systems efficiently, and applications can improve partitioning scheme without impacting clients.},
+    booktitle = {Proceedings of the 1st ACM CoNEXT Workshop on Emerging In-Network Computing Paradigms},
+    pages = {27–33},
+    numpages = {7},
+    keywords = {eBPF, Partioning, Packet Steering, XDP, Parallelism},
+    location = {Orlando, FL, USA},
+    series = {ENCP '19}
+}
+
+@misc{iouring,
+    author = {Jonathan Corbet},
+    title = {The rapid growth of io\_uring},
+    year = {2020},
+    howpublished = {\url{https://lwn.net/Articles/810414/}},
+    note = {Accessed: 2020-11-19}
+}
+@inproceedings{Rocketbufs,
+author = {Hoang, Huy and Cassell, Benjamin and Brecht, Tim and Al-Kiswany, Samer},
+title = {RocketBufs: A Framework for Building Efficient, in-Memory, Message-Oriented Middleware},
+year = {2020},
+isbn = {9781450380287},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3401025.3401744},
+doi = {10.1145/3401025.3401744},
+abstract = {As companies increasingly deploy message-oriented middleware (MOM) systems in mission-critical components of their infrastructures and services, the demand for improved performance and functionality has accelerated the rate at which new systems are being developed. Unfortunately, existing MOM systems are not designed to take advantages of techniques for high-performance data center communication (e.g., RDMA). In this paper, we describe the design and implementation of RocketBufs, a framework which provides infrastructure for building high-performance, in-memory Message-Oriented Middleware (MOM) applications. RocketBufs provides memory-based buffer abstractions and APIs, which are designed to work efficiently with different transport protocols. Applications implemented using RocketBufs manage buffer data using input (rIn) and output (rOut) classes, while the framework is responsible for transmitting, receiving and synchronizing buffer access.We use our current implementation, that supports both TCP and RDMA, to demonstrate the utility and evaluate the performance of RocketBufs by using it to implement a publish/subscribe message queuing system called RBMQ and a live streaming video application. When comparing RBMQ against two widely-used, industry-grade MOM systems, namely RabbitMQ and Redis, our evaluations show that when using TCP, RBMQ achieves broker messaging throughput up to 1.9 times higher than RabbitMQ and roughly on par with that of Redis, when configured comparably. However, RBMQ subscribers require significantly less CPU resources than those using Redis, allowing those resources to be used for other purposes like processing application data. When configured to use RDMA, RBMQ provides throughput up to 3.7 times higher than RabbitMQ and up to 1.7 times higher than Redis. We also demonstrate the flexibility of RocketBufs by implementing a live streaming video service and show that it can increase the number of simultaneous viewers by up to 55%.},
+booktitle = {Proceedings of the 14th ACM International Conference on Distributed and Event-Based Systems},
+pages = {121–132},
+numpages = {12},
+keywords = {message queuing, live streaming video, event-based systems, in-memory, message-oriented middleware, publish subscribe},
+location = {Montreal, Quebec, Canada},
+series = {DEBS '20}
+}
+@inproceedings{RDMAOverTCP,
+  title={Accelerating Redis with RDMA Over InfiniBand},
+  author={Tang, Wenhui and Lu, Yutong and Xiao, Nong and Liu, Fang and Chen, Zhiguang},
+  booktitle={International Conference on Data Mining and Big Data},
+  pages={472--483},
+  year={2017},
+  organization={Springer}
+}
+@inproceedings{RediswithRPCs5,
+  title={High Performance Design for Redis with Fast Event-Driven RDMA RPCs},
+  author={Qi, Xuecheng and Hu, Huiqi and Wei, Xing and Huang, Chengcheng and Zhou, Xuan and Zhou, Aoying},
+  booktitle={International Conference on Database Systems for Advanced Applications},
+  pages={195--210},
+  year={2020},
+  organization={Springer}
+}
+@book{macedo2011redis6,
+  title={Redis Cookbook: Practical Techniques for Fast Data Manipulation},
+  author={Macedo, Tiago and Oliveira, Fred},
+  year={2011},
+  publisher={" O'Reilly Media, Inc."}
+}
+ @misc{stackshare7, title={Why developers like RabbitMQ}, url={https://stackshare.io/rabbitmq}, journal={StackShare}} 
+ 
+ @misc{mellanox9, title={What is VMA?}, url={https://community.mellanox.com/s/article/what-is-vma-x}, journal={Mellanox Interconnect Community}, author={Mellanox}, year={2018}, month={Dec}} 
+ 
+ @article{curry2004message11,
+  title={Message-oriented middleware},
+  author={Curry, Edward},
+  journal={Middleware for communications},
+  pages={1--28},
+  year={2004},
+  publisher={Wiley Online Library}
+}
+@misc{latif2002method12,
+  title={Method and apparatus for network interface card load balancing and port aggregation},
+  author={Latif, Faisal and Sharma, Pramod and Saya, Suleman and Kuhfeld, Jim J},
+  year={2002},
+  month=may # "~21",
+  publisher={Google Patents},
+  note={US Patent 6,393,483}
+}
+@misc{redis-intro,
+    title = {Introduction to Redis},
+    author = {Redis Labs},
+    howpublished = {\url{https://redis.io/topics/introduction}},
+    note = {Accessed: 2020-12-08}
+}
+@inbook{doi:https://doi.org/10.1002/0470862084.ch1,
+author = {Curry, Edward},
+publisher = {John Wiley \& Sons, Ltd},
+isbn = {9780470862087},
+title = {Message-Oriented Middleware},
+booktitle = {Middleware for Communications},
+chapter = {1},
+pages = {1-28},
+doi = {https://doi.org/10.1002/0470862084.ch1},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/0470862084.ch1},
+eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/0470862084.ch1},
+year = {2004},
+keywords = {Quality-of-Service (QoS), remote procedure call (RPC), Message-Oriented Middleware (MOM), message queue, point-to-point messaging model, hierarchical channels, message filtering, transactional messaging, load balancing, Service-Oriented Architectures (SOA)},
+abstract = {Summary This chapter contains sections titled: Introduction Message Queues Messaging Models Common MOM Services Java Message Service Service-Oriented Architectures Summary Bibliography}
+}
+@mastersthesis{hoang2019building,
+  title={Building a Framework for High-performance In-memory Message-Oriented Middleware},
+  author={Hoang, Huy},
+  year={2019},
+  school={University of Waterloo}
+}
+@misc{redis-req-resp,
+    title={Using pipelining to speedup Redis queries},
+    author={Redis Labs},
+    howpublished={\url{https://redis.io/topics/pipelining}},
+    note = {Accessed: 2020-12-10}
+}
+@misc{redis-benchmark,
+    title={How fast is Redis?},
+    author={Redis Labs},
+    howpublished={\url{https://redis.io/topics/benchmarks}},
+    note = {Accessed: 2020-12-10}
+}

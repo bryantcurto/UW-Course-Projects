@@ -1,0 +1,63 @@
+% Compute p-value:
+%.   https://stats.stackexchange.com/questions/21581/how-to-assess-whether-a-coin-tossed-900-times-and-comes-up-heads-490-times-is-bi
+%
+%% 50 - total samples
+%% X - number of times sample is 1 and not -1
+%% sum (2 * choose(50, x) * (0.5)^50) for x=X..50
+%
+% cd /u1/bcurto/course_project/trec-adhoc/retrievals
+%
+%bm25-count1000 trec5
+%50 26.0 0.04 0.9991996797437438
+%bm25-count1000 trec6
+%50 20.0 -0.2 0.9797958971132713
+%bm25-count1000 trec7
+%50 25.0 0.0 1.0
+%bm25-count1000 trec8
+%50 28.0 0.12 0.9927738916792685
+%lm-count1000 trec5
+%50 25.0 0.0 1.0
+%lm-count1000 trec6
+%50 21.0 -0.16 0.9871170143402451
+%lm-count1000 trec7
+%50 23.0 -0.08 0.9967948635501691
+%lm-count1000 trec8
+%50 27.0 0.08 0.9967948635501691
+%
+%
+%
+\begin{table*}[hbt!]
+  \centering
+  \begin{tabular}{| c || c | c | c || c|}% | c |}
+    \hline
+    Retrieval Method & Collection & Topics & Num Queries & Corr\\% & P-value\\
+    \hline
+    \multirow{4}{*}{BM25}
+    &   TREC-5 & 251-300 & 2 & 0.04\\% & 0.8877248273\\
+%    \cline{2-6}
+    \cline{2-5}
+    &   TREC-6 & 301-350 & 2 & -0.2\\% & 1.88107954744\\
+%    \cline{2-6}
+    \cline{2-5}
+    &   TREC-7 & 351-400 & 2 & 0.0\\% & TODO\\
+%    \cline{2-6}
+    \cline{2-5}
+    &   TREC-8 & 401-450 & 2 & 0.12\\% & TODO\\
+    \hline%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \multirow{4}{*}{LM}
+    &   TREC-5 & 251-300 & 2 & 0.0\\% & TODO\\
+%    \cline{2-6}
+    \cline{2-5}
+    &   TREC-6 & 301-350 & 2 & -0.16\\% & TODO\\
+%    \cline{2-6}
+    \cline{2-5}
+    &   TREC-7 & 351-400 & 2 & -0.08\\% & TODO\\
+%    \cline{2-6}
+    \cline{2-5}
+    &   TREC-8 & 401-450 & 2 & 0.08\\% & TODO\\
+    \hline
+  \end{tabular}
+  \caption{The correlation between clarity score and average precision using the queries generate from a topic's title and description averaged over topics for several TREC collections using several retrieval methods.}
+  \label{table:bytopic}
+\end{table*}

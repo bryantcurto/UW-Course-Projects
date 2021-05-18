@@ -1,0 +1,306 @@
+\documentclass[format=sigconf, screen=true, review=false]{acmart}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{array,multirow}
+
+\title[The Clearest PRF]{The Clearest Pseudo Relevance Feedback}
+\author{Bryant Curto}
+\affiliation{
+  \institution{University of Waterloo}
+  \country{Canada}
+}
+
+\acmJournal{TOIS}
+\acmConference{Winter '21 CS848 High Recall IR}{April 30, 2021}{Waterloo, Canada}
+
+\newcommand{\inlinecode}[1]{\texttt{#1}}
+
+\setcopyright{none}
+\acmDOI{}\acmISBN{}
+%\acmYear{}\acmMonth{}
+\begin{document} 
+
+\begin{abstract}
+We propose and demonstrate a novel language modeling approach to pseudo relevance feedback that deviates from methods previously proposed.
+To do this, we make use of clarity score as proposed by Townsend et al.
+In this endeavor, we reproduce some of the results of Townsend et al. in their paper proposing clarity score.
+While we were not able to reproduce their results, and therefore were not able to evaluate our method, we identify an issue that we believe to be the cause and propose future work.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+The language modeling approach to information retrieval was first introduced by Ponte and Croft and has been shown to perform well~\cite{10.1145/290941.291008}.
+In this approach, each  document  is  viewed  as  a language sample  and  a  query  as  a  generation  process.
+With this conception, documents can be ranked based on the  probabilities of producing a given query from the corresponding document language models.
+%This approach for information retrieval models the idea that a document is relevant to a query if the document contains the query words.
+
+Relevance feedback is the method of getting feedback from the user on one or more initial sets of results in order to improve the final set of results.
+Relevance feedback operates on the belief that a user may have difficulty formulating a good query when they do not know the collection well, but is able to determine whether or not a specific document is relevant.
+By asking the user about the relevance (or non-relevance) of an intermediate set of results, the system can use this feedback to improve the final results.
+%and so it makes sense to engage in iterative query refinement of this sort. In such a scenario, relevance feedback can also be effective in tracking a user’s evolving information need: seeing some documents may lead users to refine their understanding of the information they are seeking.
+
+Pseudo relevance feedback, also known as blind relevance feedback, automates the manual part of relevance feedback so the user receives the final set of results without additional work.
+In general, pseudo relevance feedback methods retrieve an initial set of documents, assume that the top ranked documents are relevant, and then use this relevance feedback to retrieve another set of documents.
+This process can continue for a number of iterations before eventually returning a final set of results back to the user.
+
+In this work, we propose a novel language modeling approach to pseudo relevance feedback that deviates from those methods previously proposed by making use of clarity score as proposed by Townsend et al.~\cite{10.1145/564376.564429}.
+%We believe that our proposed method maintains the original intent of the user better than existing methods.
+Several methods for performing pseudo relevance feedback are based on a language modeling approach by augmenting the language model generated from the query with a model derived from the feedback documents.
+In our proposed method, a clarity score is computed from the feedback documents of a query, and the top contributing terms to the clarity score are used to augment the query -- similar to query expansion.
+This augmented query is then used to retrieve the result set.
+We believe that our method is simpler and can be applied more generally.
+%Further, our method is more general as it can be used in conjunction with many more document retrieval methods to procure the set of final results.
+%In this endevour, we alsoattempt to reproduce the results of  in their paper proposing the clarity score measure
+
+
+\section{Background}
+\subsection{Clarity Score}
+Clarity score is a post-retrieval prediction method.
+It is a measure of the degree of ambiguity of a query with respect to a collection of documents.
+More specifically, it is a measure of the degree of dissimilarity between the language usage associated with the query and the generic language of the collection as a whole.
+It is closely related to the lack of ambiguity and thus is called the clarity score.
+%It has been found to be correlated with average precision.
+
+The Clarity score is simply the KL-divergence between the query language model (i.e., the language model of the result set) and the collection language model (i.e., the language model of the entire collection).
+Each of these language models is a unigram language model, which is a probability distribution over the terms in each of their respective document collections.
+
+Let $q$ denote a query, $d$ denote a document, $D$ denote the entire collection of documents, and $D_q$ denote the set of documents retrieved by query $q$.
+With this notation, let $P(\cdot|D_q)$ denote the query language model and $P(\cdot|D)$ denote the collection language model.
+Then, the Clarity score is defined as:
+\begin{equation}
+\label{equ:clarity-score}
+\begin{split}
+Clarity(q) = KL_{div}(P(\cdot | D_q)\, \|\, P(\cdot | D))\\
+= \sum_{t \in V(D)} P(t | D_q)\, \log{\frac{P(t | D_q)}{P(t | D)}}
+\end{split}
+\end{equation}
+where $V(D)$ is the vocabulary of the entire collection and $t$ is a term in this vocabulary.
+
+The collection language model is assumed to be computed directly from the collection (i.e., without estimating) because it is assumed that the collection will not change.
+Therefore, the collection language model only needs to be computed once.
+
+In contrast, the query language model is estimated using Method 1 proposed by Lavrenko and Croft~\cite{10.1145/383952.383972}.
+It is computed as follows:
+\begin{equation}
+P(t|D_q) = \sum_{d \in D_q} P(t | d)\,P(d | q)
+\end{equation}
+
+$P(t|d)$, the probability of term $t$ in some document $d$, is estimated by the relative frequency of $t$ in $d$, smoothed by a linear combination with its relative frequency in the collection:
+\begin{equation}
+P(t | d) = \lambda \frac{tf(t,d)}{|d|} + (1-\lambda)\, P(t | D)
+\end{equation}
+Townsend et al. set $\lambda$ to 0.6. For all of our experiments, we do the same.
+
+$P(d|q)$, the probability of a document given the query, is obtained through Bayesian inversion with uniform prior probabilities for documents in $D_q$ and zero for prior probabilities for documents not in $D_q$:
+\begin{equation}
+P(d|q) = \frac{P(q|d)\, P(d)}{\sum_{d' \in D_q}P(q | d')\, P(d')}
+\end{equation}
+
+Finally $P(q|d)$, the probability of a query given a document, is computed using the query-likelihood unigram language modeling approach~\cite{10.1145/319950.320022}:
+\begin{equation}
+P(q|d)=\prod_{t\in q} P(t|d)
+\end{equation}
+
+In Townsend et al.'s paper proposing the clarity score, a set of up to 500 unique documents, all containing at least one query term, were used in place of the documents retrieved by a query, $D_q$.
+In a later work, the same authors find that the top 500 retrieved documents could be used following the observation that $P(d|q)$ generally decreases sharply before this cutoff~\cite{10.1007/s10791-006-9006-4}.
+For ease, we use the latter of these methods in our experiments.
+
+\section{Related Work}
+There has been much work in using language models to perform pseudo relevance feedback, but none that we can find using language modeling or the clarity score as we have.
+The two representative approaches for using language modeling to perform pseudo relevance feedback are the relevance model~\cite{10.1145/383952.383972} and the mixture model~\cite{10.1145/502585.502654}.
+For both of these methods, feedback documents are used to estimate a better query language model.
+
+%Positional Relevance Model for Pseudo-Relevance Feedback - 2010
+A relevance model~\cite{10.1145/383952.383972} makes the assumption that each query term is generated from the relevance model $P(w|R)$, where $R$ is the class of documents that are relevant to a user's information need.
+However, it is impossible to know $R$ without training data.
+Thus, the relevance model is estimated by assuming that the top-ranked feedback documents are samples from the relevance model.
+More specifically, the probability of a term in the relevance model is estimated by its probability in each feedback documents weighted by the correspondence of the feedback document to the query.
+The estimated relevance model is then combined with the original query model to form an updated query language model.
+
+
+%refers to a mechanism for determining the probability $P(w|R)$ of observing a word $w$ in documents that are relevant to a particular information $R$.
+%In a typical retrieval environment, it is difficult to estimate $P(w|R)$ because no training data is available.
+%Given some query, the relevance model~\cite{10.1145/383952.383972} computes a multinomial distribution characterizing the likelihood of each term 
+%To estimate the relevance model, one computes the joint probability of observing a word together with the query words in each feedback document, and then computes the sum these probabilities over all such documents.
+%Put simply, the relevance model uses the query likelihood $P(Q|D)$ as the weight for document $D$ and takes an average of the probability of each word given by each document language model.
+%The advantage of our method over the relevance model is that it considers 
+
+
+In mixture-model feedback~\cite{10.1145/502585.502654}, the words in the set of feedback documents are assumed to be drawn from two models: a background language model and a query topic language model.
+Mixture-model feedback is used to estimate the query topic model that most closely matches that of the feedback documents.
+It does this by first separating the query topic model from the background model, which can be thought of as background "noise".
+The query topic model is then combined with the original query model to form an updated query language model.
+
+For both of these methods, documents are then scored by computing the KL-divergence between the updated query model and the language model of each document.
+The top scoring documents are then returned.
+
+These methods require the system designer to decide a priori the degree to which the updated query model is influenced by the estimated relevance model and the query topic model, respectively.
+Further, these methods raise a few questions.
+%Are the terms extracted from the feedback documents truly related to the query and actually useful?
+Would it be better to expand the query with a few topical terms?
+What can we do if we want to use a non-language-modeling based approach for the re-retrieval?
+We believe that our proposed method can provide answers to these questions.
+
+
+%Many others have extended on these methods including~\cite{10.1145/1835449.1835546}.
+
+
+
+%Instead of overtly modeling the probability P(R = 1|q, d) of relevance of a document d to a query q, as in the traditional probabilis- tic approach to IR (Chapter 11), the basic language modeling approach in- stead builds a probabilistic language model Md from each document d, and ranks documents based on the probability of the model generating the query: P(q|Md).
+
+%%%% from A Boosting Approach to Improving Pseudo-RelevanceFeedback
+%The feedback method in classical probabilistic models is to select expansion terms primarilybased on the Robertson/Sparck-Jones weight [22].
+
+
+%It is a document likelihood model that incorporates pseudo-relevance feedback into a language modeling approach.
+%To do this, it uses the query likelihood as the weight for a given document and takes an average of the probability of some word given by each document language model.
+
+
+%The relevance model [15] and the mixture-model feedback[31], which will be reviewed in Section 5.1.1 and 5.1.2 respectively
+
+%K. Collins-Thompson and J. Callan. Estimation anduse of uncertainty in pseudo-relevance feedback. InSIGIR’07, SIGIR ’07, pages 303–310, 2007
+%S. Clinchant and E. Gaussier. Information-basedmodels forad hocIR. InSIGIR’10, SIGIR ’10, pages234–241, New York, NY, USA, 2010. ACM.
+%Z. Xu and R. Akella. A new probabilistic retrievalmodel based on the dirichlet compound multinomialdistribution. InSIGIR ’08, pages 427–434, 2008.
+
+%Positional Relevance Model for Pseudo-RelevanceFeedback - 2010
+%The feedback method in classical probabilis-tic models is to select expansion terms primarily based onRobertson/Sparck-Jones weight [24].
+
+%Several query expansion techniques have been developedin the language modeling framework, including, e.g., themixture-model feedback method [32] and the relevance model[16]. The basic idea is to use feedback documents to estimatea better query language model. Both the mixture model andrelevance model have been shown to be very effective, butthe relevance model appears to be more robust [18].
+
+% Related work is literally my idea...
+% http://www-labs.iro.umontreal.ca/~nie/IFT6255/Cao-sigir-08.pdf
+
+
+% May be relevant: Relevance-Based Language Models
+
+%https://dl.acm.org/doi/abs/10.1145/1835449.1835546?casa_token=f-KHw-xo_20AAAAA:cUgcOFjFUBrW2Y7ef4mdIeQLcgQVn0Ge3XCcaySvGpZX_H0Gt0IdYxWQg7NScIvQAzmv-C4Kw8YS
+
+\input{_original_correlation_table}
+
+\section{Clarity Score and Average Precision}
+\label{section:clarity-score}
+As a starting point, we reproduce some of the evaluations performed by Townsend et al. as a means of validating our implementation of the clarity score equation.
+To do this, we compute correlation between clarity scores and average precision scores for several TREC Ad Hoc Track test collections and queries.
+
+To compute clarity scores, language models for each collection and for each document in each collection needed to be computed.
+To do this, the handyman tool that comes with wumpus was used~\cite{buettcher2009wumpus}.
+Wumpus is an information retrieval system developed at the University of Waterloo by Stefan Büttcher.
+While its main purpose is to study issues that arise in the context of indexing dynamic text collections in multi-user environments, we use it in our work for performing information retrieval on static text collections.
+Further, all document retrievals are performed using wumpus.
+
+As in the original paper, we use the Spearmann rank correlation test to compute the correlation.
+To perform this test, two rankings of queries are created where one is ordered according to the queries' clarity score and the other by their average precision. %from which a correlation coefficient and p-value are computed.
+A correlation of 1 indicates perfect agreement between the rankings and a correlation of -1 indicates perfect disagreement (i.e., the rankings are inverses of each other).
+The p-value indicates the estimated probability that an apparent correlation as extreme, or more extreme, would occur by chance if clarity scores and average precision scores were not associated.
+
+Some of the evaluation results presented in the original paper can be seen in Table~\ref{table:original}.
+Reviewing the columns from left to right,
+\textit{Collection} refers to the TREC Ad Hoc Track whose document collection was used for the retrieval.
+\textit{Topics} refers to the range of topic numbers from which queries were generated.
+\textit{Source} refers to the component of the topic (e.g., title, description, narrative) from which the query was derived.
+\textit{Num Queries} refers to the number of queries from which evaluation results are derived.
+\textit{Correlation} and \textit{P-value} refer to the evaluation measures previously described.
+As noted in the original paper, the results show a strong positive association between the clarity score and the average precision of a query.
+
+\input{_collections_table}
+
+Our correlation results can be seen in Table~\ref{table:collections} following a similar table layout.
+The first column, \textit{Retrieval Method}, refers to the wumpus ranked retrieval method used for the document retrieval.
+%Okapi BM25...
+% Describe BM25?
+BM25 refers to Okapi BM25.
+LM refers to a language modeling based approach for ranked retrieval.
+The specific method is based on Bayesian smoothing with Dirichlet priors as proposed by Zhai and Lafferty~\cite{10.1145/984321.984322}. Note also that we source our queries from not only topic titles but also topic descriptions.
+Further, note that we compute rank correlations from queries derived from topic titles only, topic descriptions only, and topic titles or descriptions.
+(% Average terms in title
+%    cd /u1/bcurto/course_project/trec-adhoc
+%    for f in $(ls queries/*/*_title.txt); do ~/course_project/clarityscore/term_count.py "$f"; done  | awk '{ sum+=$1 } END{ print sum/ NR }'
+Across all topics used, titles consist of 3.04 terms on average.
+% Average terms in description
+%    cd /u1/bcurto/course_project/trec-adhoc
+%    for f in $(ls queries/*/*_desc.txt); do ~/course_project/clarityscore/term_count.py "$f"; done  | awk '{ sum+=$1 } END{ print sum/ NR }'
+Meanwhile, descriptions consist of 15.865 terms on average.)
+
+
+Inspecting our results (Table~\ref{table:collections}), there appears to be no association between the clarity score and average precision of a query in contrast to what was observed in the original paper (Table~\ref{table:original}).
+Looking at the p-values, our results indicate a rather high probability (i.e., over 50\% in most cases) that an apparent correlation as extreme, or more extreme, would occur by chance if clarity scores and average precision scores were not associated.
+The only exceptions are the TREC-6 title derived queries when BM25 was used and the TREC-6 description derived queries when LM was used (in bold for convenience).
+However, it is important to note that neither of these correlations are as large or these p-values as small as those presented in the original paper.
+
+\input{_pertopic_table}
+
+To better understand our results, we compute the rank correlation between clarity score and average precision per topic using the queries generated from each topic's title and description.
+This is to see if correlation results observed in the original paper can be replicated by comparing queries about the same topic. %between the original results and our results can be observed by comparing the scores of queries about the same topic.
+The results of this evaluation can be seen in Table~\ref{table:bytopic}.
+\textit{Num Queries} indicates the number of queries with which each rank correlation was computed.
+\textit{Correlation} shows the mean of the rank correlations.
+For each retrieval method and collection, 50 rank correlations, each of which was computed using 2 queries generated from the same topic, were averaged.
+Rank correlations are either 1.0 or -1.0, so we do not show standard deviation.
+%\textit{P-value} indicates the estimated probability that an apparent set of correlations as extreme, or more extreme, would occur by chance if clarity scores and average precision scores were not associated.
+These results indicate that, even when looking at the correlation between clarity score and average precision at the per-topic level, the association is tenuous at best.
+
+\input{_clarity_score_stats}
+
+Inspecting the clarity scores directly, we come to an interesting discovery.
+Averages and standard deviations of clarity scores and their top term contributions are presented in Table~\ref{table:clarity-scores}.
+The top term contribution is the term $t \in V(D)$ that contributes the most to the clarity score of a query as seen in Equation~\ref{equ:clarity-score}.
+Clarity scores appear to cluster around 0.8 for all collections.
+Further, top terms contributions account for approximately 10\% of the clarity score.
+
+We believe that this is notable because we implemented the clarity score equation in Python using its built-in \inlinecode{float} type.
+%Note that the average precision scores of our queries are also rather small -- most being below 0.2.
+We believe that the lack of association between clarity score and average precision observable in our results may be attributed to our using the inexact \inlinecode{float} type to compute clarity scores.
+In conjunction with the smallness of each term's contribution, we believe that the error introduced in our calculations may have resulted in computed clarity scores deviating far enough from their actual values to have broken the association between clarity score and average precision.
+
+% Describe mean and stddev of clarity scores. Small values suggest that the the queries are poor. Strengthens the argument that exact computations are needed since per-term contribution is so small.
+
+
+\section{Clarity Based Relevance Feedback}
+In this section, we demonstrate how one might perform our proposed method of using clarity score for pseudo relevance feedback.
+
+Using the queries from the previous section that showed the strongest association between clarity score and average precision -- TREC-6 titles retrieved using BM25 -- we now attempt to use clarity score for pseudo relevance feedback.
+To do this, we reformulate each query by adding the term the contributed the most to a given query's clarity score.
+
+For example, topic 302, which received a clarity score of 1.40265, has the title, \textit{"Poliomyelitis and Post-Polio"}, and the following description: \textit{"Is the disease of Poliomyelitis (polio) under control in the world?}
+
+The term that contributed most to the clarity score of the query generated from this title was \textit{"health"} with a term contribution of 0.10974.
+Therefore, the newly formulated query includes the term \textit{"health"}.
+
+Table~\ref{table:reretrievals} shows the mean and standard deviation of the increase in average precision from using queries augmented with clarity based pseudo relevance feedback as compared to the original queries.
+As may have been expected, average precision remains approximately the same or even goes down a bit.
+
+\input{_reretrievals_table}
+
+\section{Future Work}
+As discussed in Section~\ref{section:clarity-score}, we believe that the observed lack of association between clarity score and average precision may be a result of our use of Python's built-in inexact \inlinecode{float} type.
+As future work, we plan on re-implementing our tools to compute clarity scores using a type that can represent numbers exactly throughout the computation (i.e., arbitrary precision rational number types).
+%If we determine this to be the cause, it may bring into question actual the computational costs to use clarity score as a post-retrieval prediction method.
+
+With this correction in place, we plan on reevaluating the correlation between clarity score and average precision.
+We also intend on reevaluating our pseudo relevance feedback method on a wider range of queries and by augmenting queries with a varying number of top contributing terms.
+
+
+
+%This automatic technique mostly works. Evidence suggests that it tends to work better than global analysis (Section 9.2). It has been found to im- prove performance in the TREC ad hoc task.
+%See for example the results in Figure 9.5. But it is not without the dangers of an automatic process. For example, if the query is about copper mines and the top several documents are all about mines in Chile, then there may be query drift in the direction of documents on Chile.
+
+%https://dl.acm.org/doi/abs/10.1145/2009916.2009942?casa_token=rDEF8msfsXcAAAAA:lBx2yISWkBQ8AS47qJwfhAxaeg_ROF6dGvH56JyZI7jBRpRucnJSclPVb4ku5u0niPrkdB7sGEc_
+While pseudo relevance feedback techniques generally improve retrieval performance on average, they are not robust.
+They tend to advantage some queries and disadvantage other queries~\cite{collins2009reducing,harman2004nrrc}.
+This limits the usefulness of pseudo relevance feedback in real world retrieval applications.
+As future work, we are interested in understanding to what degree this issue impacts our proposed method.
+
+\section{Conclusion}
+In this work, we propose and demonstrate a clarity score based pseudo relevance feedback method that we believe is simpler and can be applied more generally than other existing language modeling based approaches.
+To do this, we attempted to reproduce the results of Townsend et al. showing the correlation between clarity score and average precision in their paper proposing clarity score~\cite{10.1145/564376.564429}.
+While we were not able to reproduce their evaluation results, we have identified an issue in our setup that we believe, once fix, will enable us to get the expected result and will enable us to fully evaluate our proposed method.
+
+
+\section{Accessibility}
+All code can be found \href{https://github.com/bryantcurto/UW-CS848-ClarityScore}{(here)}.
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}
